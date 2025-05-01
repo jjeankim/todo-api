@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 
 const TaskSchema = new mongoose.Schema(
   {
-    title: {
+    content: {
       type: String,
       required: true,
       maxLength: 30,
     },
-    description: {
-      type: String,
-    },
+    // description: {
+    //   type: String,
+    // },
     isComplete: {
       type: Boolean,
       default: false,
