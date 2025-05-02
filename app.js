@@ -17,6 +17,7 @@ const corsOptions = {
     "http://localhost:3000",
     "http://localhost:3001",
     "https://todo-api-3yui.onrender.com",
+    "https://todo-list-jjeankim.netlify.app"
   ],
 };
 app.use(cors(corsOptions));
