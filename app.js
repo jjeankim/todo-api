@@ -12,13 +12,7 @@ mongoose
 const app = express();
 
 const corsOptions = {
-  origin: [
-    "http://127.0.0.1:3000",
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "https://todo-api-3yui.onrender.com",
-    "https://todo-list-jjeankim.netlify.app"
-  ],
+  origin: ["http://localhost:3000", "https://todo-list-jjeankim.netlify.app"],
 };
 app.use(cors(corsOptions));
 app.use(express.json());
