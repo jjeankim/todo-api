@@ -10,7 +10,15 @@ mongoose
   .then(() => console.log("Connected to DB"));
 
 const app = express();
-app.use(cors());
+
+const corsOptions = {
+  origin: [
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
+    "https://todo-api-3yui.onrender.com",
+  ],
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 function asyncHandler(handler) {
@@ -32,27 +40,11 @@ function asyncHandler(handler) {
 app.get(
   "/tasks",
   asyncHandler(async (req, res) => {
-    /** 쿼리 파라미터
-     * - sort : 'oldest'인 경우 오래된 태스크 기준, 나머지 경우 새로운 태스크 기준
-     * - count : 태스크 개수수
-     */
     const sort = req.query.sort;
-    const count = Number(req.query.count) || 0;
+    const count = req.query.count || 0;
 
     const sortOption = { createdAt: sort === "oldest" ? "asc" : "desc" };
     const tasks = await Task.find().sort(sortOption).limit(count);
-
-    // const compareFn =
-    //   sort === "oldest"
-    //     ? (a, b) => a.createdAt - b.createdAt
-    //     : (a, b) => b.createdAt - a.createdAt;
-
-    // let newTasks = mockTasks.sort(compareFn);
-
-    // if (count) {
-    //   newTasks = mockTasks.slice(0, count);
-    // }
-
     res.send(tasks);
   })
 );
@@ -72,14 +64,6 @@ app.get(
 app.post(
   "/tasks",
   asyncHandler(async (req, res) => {
-    // const newTask = req.body
-    // const ids = mockTasks.map(task => task.id)
-    // newTask.id = Math.max(...ids) + 1
-    // newTask.isComplete = false
-    // newTask.createdAt = new Date()
-    // newTask.updatedAt = new Date()
-
-    // mockTasks.push(newTask)
     const newTask = await Task.create(req.body);
     res.status(201).send(newTask);
   })
@@ -88,15 +72,12 @@ app.post(
 app.patch(
   "/tasks/:id",
   asyncHandler(async (req, res) => {
-    // const id = Number(req.params.id);
-    // const task = mockTasks.find((task) => task.id === id);
     const id = req.params.id;
     const task = await Task.findById(id);
     if (task) {
       Object.keys(req.body).forEach((key) => {
         task[key] = req.body[key];
       });
-      // task.updatedAt = new Date();
       await task.save();
       res.send(task);
     } else {
@@ -108,8 +89,9 @@ app.patch(
 app.delete(
   "/tasks/:id",
   asyncHandler(async (req, res) => {
-    const id = Number(req.params.id);
+    const id = req.params.id;
     const task = await Task.findByIdAndDelete(id);
+
     if (task) {
       res.sendStatus(204);
     } else {
