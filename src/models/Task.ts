@@ -1,4 +1,11 @@
-import mongoose from "mongoose";
+import mongoose, { Types, Document } from "mongoose";
+
+export interface ITask extends Document {
+  content: string;
+  isComplete: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const TaskSchema = new mongoose.Schema(
   {
@@ -7,9 +14,6 @@ const TaskSchema = new mongoose.Schema(
       required: true,
       maxLength: 30,
     },
-    // description: {
-    //   type: String,
-    // },
     isComplete: {
       type: Boolean,
       default: false,
@@ -20,6 +24,6 @@ const TaskSchema = new mongoose.Schema(
   }
 );
 
-const Task = mongoose.model("Task", TaskSchema);
+const Task = mongoose.model<ITask>("Task", TaskSchema);
 
 export default Task;

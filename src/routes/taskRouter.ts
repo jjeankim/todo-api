@@ -1,16 +1,18 @@
-import Task from "../models/Task.js";
-import express from "express";
-import asyncHandler from "../utils/asyncHandler.js";
+import Task, { ITask } from "../models/Task.js";
+import express, { Request, Response, NextFunction } from "express";
+import asyncHandler from "../utils/asyncHandler";
 
-const taskRouter = express.Router()
+const taskRouter = express.Router();
 
 taskRouter.get(
   "/",
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const sort = req.query.sort;
-    const count = req.query.count || 0;
+    const count:number = parseInt(req.query.count as string) || 0;
 
-    const sortOption = { createdAt: sort === "oldest" ? "asc" : "desc" };
+    const sortOption: Record<string, 1 | -1 | "asc" | "desc"> = {
+      createdAt: sort === "oldest" ? "asc" : "desc",
+    };
     const tasks = await Task.find().sort(sortOption).limit(count);
     res.send(tasks);
   })
@@ -18,7 +20,7 @@ taskRouter.get(
 
 taskRouter.get(
   "/:id",
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req:Request, res:Response) => {
     const id = req.params.id;
     const task = await Task.findById(id);
     if (task) res.send(task);
@@ -30,7 +32,7 @@ taskRouter.get(
 
 taskRouter.post(
   "/",
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const newTask = await Task.create(req.body);
     res.status(201).send(newTask);
   })
@@ -38,12 +40,13 @@ taskRouter.post(
 
 taskRouter.patch(
   "/:id",
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const id = req.params.id;
     const task = await Task.findById(id);
     if (task) {
+      const updates:Partial<ITask> = req.body;
       Object.keys(req.body).forEach((key) => {
-        task[key] = req.body[key];
+        (task as any)[key] = req.body[key];
       });
       await task.save();
       res.send(task);
@@ -55,7 +58,7 @@ taskRouter.patch(
 
 taskRouter.delete(
   "/:id",
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const id = req.params.id;
     const task = await Task.findByIdAndDelete(id);
 

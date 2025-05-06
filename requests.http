@@ -6,7 +6,7 @@ GET http://localhost:3000/tasks?sort=oldest&count=3
 
 ###
 
-GET http://localhost:3000/tasks/68133dac0520911eeaadc768
+GET http://localhost:3000/tasks/68133dac0520911eeaadc767
 
 ###
 
@@ -14,8 +14,7 @@ POST  http://localhost:3000/tasks
 Content-Type: application/json
 
 {
-  "content": "자바스크립트로 백엔드 연동하기",
-  "description": "환경변수 세팅하는 과정까지 완료"
+  "content": "typescript로 마이그레이션"
 }
 
 ###
@@ -24,8 +23,7 @@ PATCH http://localhost:3000/tasks/68133dac0520911eeaadc768
 Content-Type: application/json
 
 {
-  "content": "운동",
-  "description" : "운동의 강도를 높여야할 시기"
+  "content": "운동"
 }
 
 ###

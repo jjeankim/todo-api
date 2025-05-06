@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
-import taskRouter from "./routes/taskRouter.js";
+import taskRouter from "./routes/taskRouter";
 
 mongoose
-  .connect(process.env.DATABASE_URL)
+  .connect(process.env.DATABASE_URL as string)
   .then(() => console.log("Connected to DB"));
 
 const app = express();
